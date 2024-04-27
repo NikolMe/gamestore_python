@@ -15,30 +15,38 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from games import views
+from games.views import HomeView, GameUpdateView, GameCreateView, GameDetailView, GameDeleteView, \
+    PublisherDetailView, PublisherDeleteView, PublisherUpdateView, PublisherListView, PublisherCreateView, \
+    CategoryCreateView, CategoryListView, CategoryDetailView, CategoryDeleteView, CategoryUpdateView
 from django.conf.urls.static import static
 
 from gamestore import settings
 
+
+
 urlpatterns = [
-                  path('', views.home, name='home'),
+                  path('', HomeView.as_view(), name='home'),
                   path('admin/', admin.site.urls),
-                  path('add_publisher/', views.add_publisher, name='add_publisher'),
-                  path('add_game/', views.add_game, name='add_game'),
-                  path('game/<int:game_id>/', views.game_detail, name='game_detail'),
-                  path('game/<int:game_id>/delete/', views.delete_game, name='delete_game'),
-                  path('game/<int:game_id>/update/', views.update_game, name='update_game'),
-                  path('publisher/<int:publisher_id>/', views.publisher_detail, name='publisher_detail'),
-                  path('publisher/<int:publisher_id>/delete/', views.delete_publisher, name='delete_publisher'),
-                  path('publisher/<int:publisher_id>/update/', views.update_publisher, name='update_publisher'),
-                  path('publishers/', views.publishers, name='publishers'),
-                  path('add_category/', views.add_category, name='add_category'),
-                  path('categories/', views.categories, name='categories'),
-                  path('category/<int:category_id>/', views.category_detail, name='category_detail'),
-                  path('category/<int:category_id>/delete/', views.delete_category, name='delete_category'),
-                  path('category/<int:category_id>/update/', views.update_category, name='update_category'),
+                  path('add_publisher/', PublisherCreateView.as_view(), name='add_publisher'),
+                  path('add_game/', GameCreateView.as_view(), name='add_game'),
+                  path('game/<int:game_id>/', GameDetailView.as_view(), name='game_detail'),
+                  path('game/<int:game_id>/delete/', GameDeleteView.as_view(), name='delete_game'),
+                  path('game/<int:game_id>/update/', GameUpdateView.as_view(), name='update_game'),
+                  path('publisher/<int:publisher_id>/', PublisherDetailView.as_view(), name='publisher_detail'),
+                  path('publisher/<int:publisher_id>/delete/', PublisherDeleteView.as_view(), name='delete_publisher'),
+                  path('publisher/<int:publisher_id>/update/', PublisherUpdateView.as_view(), name='update_publisher'),
+                  path('publishers/', PublisherListView.as_view(), name='publishers'),
+                  path('add_category/', CategoryCreateView.as_view(), name='add_category'),
+                  path('categories/', CategoryListView.as_view(), name='categories'),
+                  path('category/<int:category_id>/', CategoryDetailView.as_view(), name='category_detail'),
+                  path('category/<int:category_id>/delete/', CategoryDeleteView.as_view(), name='delete_category'),
+                  path('category/<int:category_id>/update/', CategoryUpdateView.as_view(), name='update_category'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = 'Адміністрування ігрового магазину'
+admin.site.index_title = 'Моделі застосунку'
+admin.site.site_title = 'Ігровий магазин'
