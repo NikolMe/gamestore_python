@@ -4,7 +4,10 @@
 
 {% block content %}
 <h2>Categories</h2>
+    {% load custom_tags %}
+    {% if request.user|user_in_group:'manager' %}
         <a class="primary-btn" href="{% url 'add_category' %}">Add Category</a>
+    {% endif %}
         <div class="items-list">
             {% for category in categories %}
                 <a class="item-link" href="{% url 'category_detail' category.id %}">

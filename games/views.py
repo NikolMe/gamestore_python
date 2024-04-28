@@ -1,12 +1,29 @@
+from django.contrib.auth import logout
+from django.contrib.auth.models import User, Group, Permission
 from django.shortcuts import render
+from django.urls import reverse
+from django.contrib.auth import authenticate, login
+
 
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from .models import Game, Publisher, Category
-from .forms import PublisherForm, GameForm, CategoryForm
+from .forms import PublisherForm, GameForm, CategoryForm, SignUpForm
 from django.views.generic import View, UpdateView, CreateView, DetailView, DeleteView, ListView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.shortcuts import HttpResponseRedirect
+from django.contrib.auth.decorators import user_passes_test
+
+
+def user_is_manager(user):
+    return user.groups.filter(name='manager').exists()
+
+
+def user_is_admin(user):
+    return user.groups.filter(name='admin').exists()
 
 
 class ObjectDetailMixin:
@@ -29,6 +46,7 @@ class ObjectUpdateMixin:
         return redirect(self.success_url)
 
 
+@method_decorator(login_required, name='dispatch')
 class HomeView(View):
     def get(self, request):
         games = Game.objects.all()
@@ -36,6 +54,7 @@ class HomeView(View):
         return render(request, 'home.html', {'games': games, 'publishers': publishers})
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class GameCreateView(CreateView):
     model = Game
     form_class = GameForm
@@ -43,16 +62,19 @@ class GameCreateView(CreateView):
     success_url = reverse_lazy('home')
 
 
+@method_decorator(login_required, name='dispatch')
 class GameDetailView(DetailView):
     model = Game
     template_name = 'game/game_detail.html'
     context_object_name = 'game'
     pk_url_kwarg = 'game_id'
+
     def get_object(self, queryset=None):
         game_id = self.kwargs.get('game_id')
         return get_object_or_404(Game.objects.prefetch_related('categories', 'publisher'), pk=game_id)
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class GameDeleteView(ObjectDeleteMixin, DeleteView):
     model = Game
     template_name = 'game/delete_game_confirmation.html'
@@ -60,6 +82,7 @@ class GameDeleteView(ObjectDeleteMixin, DeleteView):
     pk_url_kwarg = 'game_id'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class GameUpdateView(ObjectUpdateMixin, UpdateView):
     model = Game
     form_class = GameForm
@@ -77,6 +100,7 @@ class GameUpdateView(ObjectUpdateMixin, UpdateView):
         return get_object_or_404(Game, pk=game_id)
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class PublisherCreateView(CreateView):
     model = Publisher
     form_class = PublisherForm
@@ -84,6 +108,7 @@ class PublisherCreateView(CreateView):
     success_url = reverse_lazy('publishers')
 
 
+@method_decorator(login_required, name='dispatch')
 class PublisherDetailView(ObjectDetailMixin, DetailView):
     model = Publisher
     template_name = 'publisher/publisher_detail.html'
@@ -91,6 +116,7 @@ class PublisherDetailView(ObjectDetailMixin, DetailView):
     pk_url_kwarg = 'publisher_id'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class PublisherDeleteView(ObjectDeleteMixin, DeleteView):
     model = Publisher
     template_name = 'publisher/delete_publisher_confirmation.html'
@@ -98,6 +124,7 @@ class PublisherDeleteView(ObjectDeleteMixin, DeleteView):
     pk_url_kwarg = 'publisher_id'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class PublisherUpdateView(ObjectUpdateMixin, UpdateView):
     model = Publisher
     form_class = PublisherForm
@@ -106,12 +133,14 @@ class PublisherUpdateView(ObjectUpdateMixin, UpdateView):
     success_url = reverse_lazy('publishers')
 
 
+@method_decorator(login_required, name='dispatch')
 class PublisherListView(ListView):
     model = Publisher
     template_name = 'publisher/publishers.html'
     context_object_name = 'publishers'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
@@ -119,12 +148,14 @@ class CategoryCreateView(CreateView):
     success_url = reverse_lazy('categories')
 
 
+@method_decorator(login_required, name='dispatch')
 class CategoryListView(ListView):
     model = Category
     template_name = 'category/categories.html'
     context_object_name = 'categories'
 
 
+@method_decorator(login_required, name='dispatch')
 class CategoryDetailView(ObjectDetailMixin, DetailView):
     model = Category
     template_name = 'category/category_detail.html'
@@ -132,6 +163,7 @@ class CategoryDetailView(ObjectDetailMixin, DetailView):
     pk_url_kwarg = 'category_id'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class CategoryDeleteView(ObjectDeleteMixin, DeleteView):
     model = Category
     template_name = 'category/delete_category_confirmation.html'
@@ -139,9 +171,72 @@ class CategoryDeleteView(ObjectDeleteMixin, DeleteView):
     pk_url_kwarg = 'category_id'
 
 
+@method_decorator(user_passes_test(user_is_manager), name='dispatch')
 class CategoryUpdateView(ObjectUpdateMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/update_category.html'
     pk_url_kwarg = 'category_id'
     success_url = reverse_lazy('categories')
+
+
+@method_decorator(user_passes_test(user_is_admin), name='dispatch')
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'user/user_detail.html'
+    context_object_name = 'user'
+    pk_url_kwarg = 'user_id'
+
+
+@method_decorator(user_passes_test(user_is_admin), name='dispatch')
+class UserDeleteView(ObjectDeleteMixin, DeleteView):
+    model = User
+    template_name = 'user/delete_user.html'
+    success_url = reverse_lazy('users')
+    pk_url_kwarg = 'user_id'
+
+
+@method_decorator(user_passes_test(user_is_admin), name='dispatch')
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = SignUpForm
+    template_name = 'user/update_user.html'
+    pk_url_kwarg = 'user_id'
+    success_url = reverse_lazy('users')
+
+
+@method_decorator(user_passes_test(user_is_admin), name='dispatch')
+class UserListView(ListView):
+    model = User
+    template_name = 'user/users.html'
+    context_object_name = 'users'
+
+
+def set_admin_role(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    admin_group, _ = Group.objects.get_or_create(name='admin')
+    user.groups.add(admin_group)
+    return redirect(reverse('user_detail', kwargs={'user_id': user_id}))
+
+
+def set_manager_role(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    manager_group, _ = Group.objects.get_or_create(name='manager')
+    user.groups.add(manager_group)
+    return redirect(reverse('user_detail', kwargs={'user_id': user_id}))
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/logout/')
+
+
+def sign_up(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect to login page after successful sign-up
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/sign_up.html', {'form': form})

@@ -35,8 +35,12 @@
             <button class="light-btn">Order</button>
             <br>
             <div style="display: flex;">
+                
+    {% load custom_tags %}
+    {% if request.user|user_in_group:'manager' %}
             <a class="primary-btn" href="{% url 'delete_game' game.id %}">Delete Game</a>
             <a class="primary-btn" href="{% url 'update_game' game.id %}">Update Game</a>
+    {% endif %}
                 </div>
         </div>
     </div>

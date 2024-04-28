@@ -4,7 +4,10 @@
 
 {% block content %}
     <h2>{{ category.name }}</h2>
+    {% load custom_tags %}
+    {% if request.user|user_in_group:'manager' %}
     <a class="primary-btn" href="{% url 'delete_category' category.id %}">Delete category</a>
     <a class="primary-btn" href="{% url 'update_category' category.id %}">Update category</a>
+    {% endif %}
         {% include 'components/game_component.html' with games=category.game_set.all %}
 {% endblock %}

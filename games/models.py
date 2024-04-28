@@ -1,5 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
+from django.contrib.auth.models import User, Group
+
+#user_group = Group.objects.create(name='user')
+#manager_group = Group.objects.create(name='manager')
+#admin_group = Group.objects.create(name='admin')
 
 
 class Publisher(models.Model):
@@ -39,3 +45,4 @@ class Game(models.Model):
     @property
     def discount_price(self):
         return float(self.price) * (1 - float(self.discount) / 100)
+

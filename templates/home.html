@@ -4,6 +4,9 @@
 
 {% block content %}
     <h2 style="margin-bottom: 20px;">Games</h2>
+    {% load custom_tags %}
+    {% if request.user|user_in_group:'manager' %}
     <a class="primary-btn" href="{% url 'add_game' %}">Add Game</a>
+    {% endif %}
     {% include 'components/game_component.html' %}
 {% endblock %}

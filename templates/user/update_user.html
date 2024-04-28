@@ -1,0 +1,12 @@
+{% extends 'shared/base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}Home - My Site{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+        {{ form|crispy }}
+    <button class="primary-btn" type="submit">Update user</button>
+</form>
+{% endblock %}

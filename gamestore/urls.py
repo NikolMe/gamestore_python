@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls')
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from games.views import HomeView, GameUpdateView, GameCreateView, GameDetailView, GameDeleteView, \
     PublisherDetailView, PublisherDeleteView, PublisherUpdateView, PublisherListView, PublisherCreateView, \
-    CategoryCreateView, CategoryListView, CategoryDetailView, CategoryDeleteView, CategoryUpdateView
+    CategoryCreateView, CategoryListView, CategoryDetailView, CategoryDeleteView, CategoryUpdateView, \
+    UserListView, UserDetailView, UserDeleteView, UserUpdateView, \
+    set_admin_role, set_manager_role, sign_up
 from django.conf.urls.static import static
 
 from gamestore import settings
@@ -41,6 +43,14 @@ urlpatterns = [
                   path('category/<int:category_id>/', CategoryDetailView.as_view(), name='category_detail'),
                   path('category/<int:category_id>/delete/', CategoryDeleteView.as_view(), name='delete_category'),
                   path('category/<int:category_id>/update/', CategoryUpdateView.as_view(), name='update_category'),
+                  path('registration/signup/', sign_up, name='signup'),
+                  path('accounts/', include('django.contrib.auth.urls')),
+                  path('user/users/', UserListView.as_view(), name='users'),
+                  path('user/<int:user_id>/set_admin_role/', set_admin_role, name='set_admin_role'),
+                  path('user/<int:user_id>/set_manager_role/', set_manager_role, name='set_manager_role'),
+                  path('user/<int:user_id>/', UserDetailView.as_view(), name='user_detail'),
+                  path('user/<int:user_id>/delete/', UserDeleteView.as_view(), name='delete_user'),
+                  path('user/<int:user_id>/update/', UserUpdateView.as_view(), name='update_user'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
