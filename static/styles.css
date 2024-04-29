@@ -33,6 +33,8 @@ nav {
     border-radius: 10px;
     margin: 5px;
     width: fit-content;
+    border: none;
+    outline:none;
 }
 
 .primary-btn:hover {

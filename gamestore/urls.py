@@ -51,6 +51,7 @@ urlpatterns = [
                   path('user/<int:user_id>/', UserDetailView.as_view(), name='user_detail'),
                   path('user/<int:user_id>/delete/', UserDeleteView.as_view(), name='delete_user'),
                   path('user/<int:user_id>/update/', UserUpdateView.as_view(), name='update_user'),
+                  path('i18n/', include('django.conf.urls.i18n')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

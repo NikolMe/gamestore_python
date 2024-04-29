@@ -1,9 +1,9 @@
 {% extends 'shared/base.html' %}
 
 {% block title %}Home - My Site{% endblock %}
-
+{% load i18n %}
 {% block content %}
-<h2>Users</h2>
+<h2>{% trans "Users" %}</h2>
         <div class="items-list">
             {% for user in users %}
                 <a class="item-link" href="{% url 'user_detail' user.id %}">

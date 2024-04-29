@@ -2,11 +2,11 @@
 {% load crispy_forms_filters %}
 
 {% block title %}Home - My Site{% endblock %}
-
+{% load i18n %}
 {% block content %}
 <form method="post">
     {% csrf_token %}
         {{ form|crispy }}
-    <button class="primary-btn" type="submit">Update user</button>
+    <button class="primary-btn" type="submit">{% trans "Update user" %}</button>
 </form>
 {% endblock %}

@@ -1,12 +1,13 @@
 {% extends 'shared/base.html' %}
 
 {% block title %}Home - My Site{% endblock %}
+{% load i18n %}
 
 {% block content %}
-    <h2 style="margin-bottom: 20px;">Games</h2>
+    <h2 style="margin-bottom: 20px;">{% trans "Games" %}</h2>
     {% load custom_tags %}
     {% if request.user|user_in_group:'manager' %}
-    <a class="primary-btn" href="{% url 'add_game' %}">Add Game</a>
+    <a class="primary-btn" href="{% url 'add_game' %}">{% trans "Add Game" %}</a>
     {% endif %}
     {% include 'components/game_component.html' %}
 {% endblock %}

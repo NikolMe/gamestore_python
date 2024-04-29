@@ -14,22 +14,38 @@
     <!-- Header content -->
 </header>
 <nav>
+    {% load i18n %}
+
     <div class="logo">
         {% load static %}
         <div><img src={% static 'game-icon.png' %} alt="game" width="60" style="margin-right: 10px; margin-left: 15px;"></div>
         <h3>Gamestore</h3>
     </div>
-    <a class="primary-btn" href={% url 'home' %}>Home</a>
-    <a class="primary-btn" href="{% url 'publishers' %}">Publishers</a>
-    <a class="primary-btn" href="{% url 'categories' %}">Categories</a>
+
+<form action="{% url 'set_language' %}" method="post" style="margin-left: 15px;">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}" />
+        <select name="language" style="padding: 10px; border-radius: 8px; border: none; color: white; background-color: #44515f">
+            <option value="uk">Українська</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+        </select>
+    <button class="primary-btn" type="submit">{% trans "Change Language" %}</button>
+    </form>
+
+    <a class="primary-btn" href="{% url 'home' %}">{% trans "Home" %}</a>
+    <a class="primary-btn" href="{% url 'publishers' %}">{% trans "Publishers" %}</a>
+    <a class="primary-btn" href="{% url 'categories' %}">{% trans "Categories" %}</a>
     {% load custom_tags %}
     {% if request.user|user_in_group:'admin' %}
-    <a class="primary-btn" href="{% url 'users' %}">Users</a>
+    <a class="primary-btn" href="{% url 'users' %}">{% trans "Users" %}</a>
     {% endif %}
+
     <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
-    <button type="submit">logout</button>
-</form>
+    <button class="primary-btn" type="submit">{% trans "Logout" %}</button>
+    </form>
+
 </nav>
 <main style="margin-left: 20px; margin-top: 20px; position: relative;">
     {% block content %}

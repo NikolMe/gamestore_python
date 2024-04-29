@@ -7,6 +7,7 @@
 <form method="post">
     {% csrf_token %}
         {{ form|crispy }}
-    <button class="primary-btn" type="submit">Update category</button>
+            {% load i18n %}
+    <button class="primary-btn" type="submit">{% trans "Update category" %}</button>
 </form>
 {% endblock %}

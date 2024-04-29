@@ -1,19 +1,19 @@
 {% extends 'shared/base.html' %}
 
 {% block title %}Home - My Site{% endblock %}
-
+{% load i18n %}
 {% block content %}
     <h2>{{ user.username }}</h2>
-    <p>Email: {{ user.email }}</p>
-    <p>Last login: {{ user.last_login }} {{ user }}</p>
-    <h5>Groups</h5>
+    <p>{% trans "Email" %}: {{ user.email }}</p>
+    <p>{% trans "Last login" %}: {{ user.last_login }} {{ user }}</p>
+    <h5>{% trans "Groups" %}</h5>
     {% for group in user.groups.all %}
                 <p>
                 {{ group.name }}
                 </p>
             {% endfor %}
-    <a class="primary-btn" href="{% url 'delete_user' user.id %}">Delete user</a>
-    <a class="primary-btn" href="{% url 'update_user' user.id %}">Update user</a>
-    <a class="primary-btn" href="{% url 'set_admin_role' user_id=user.id %}">Set admin role</a>
-    <a class="primary-btn" href="{% url 'set_manager_role' user_id=user.id %}">Set manager role</a>
+    <a class="primary-btn" href="{% url 'delete_user' user.id %}">{% trans "Delete user" %}</a>
+    <a class="primary-btn" href="{% url 'update_user' user.id %}">{% trans "Update user" %}</a>
+    <a class="primary-btn" href="{% url 'set_admin_role' user_id=user.id %}">{% trans "Set admin role" %}</a>
+    <a class="primary-btn" href="{% url 'set_manager_role' user_id=user.id %}">{% trans "Set manager role" %}</a>
 {% endblock %}

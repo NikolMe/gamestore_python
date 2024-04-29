@@ -3,10 +3,11 @@
 {% block title %}Home - My Site{% endblock %}
 
 {% block content %}
-<h2>Delete Game</h2>
-<p>Are you sure you want to delete "{{ game.title }}"?</p>
+            {% load i18n %}
+<h2>{% trans "Delete Game" %}</h2>
+<p>{% trans "Are you sure you want to delete" %}"{{ game.title }}"?</p>
 <form method="post">
     {% csrf_token %}
-    <button class="primary-btn" type="submit">Confirm Delete</button>
+    <button class="primary-btn" type="submit">{% trans "Confirm Delete" %}</button>
 </form>
 {% endblock %}

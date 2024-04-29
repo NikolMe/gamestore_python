@@ -4,7 +4,8 @@
 
 {% block content %}
 <h2>Delete Category</h2>
-<p>Are you sure you want to delete "{{ category.name }}"?</p>
+    {% load i18n %}
+<p>{% trans "Are you sure you want to delete  "%} {{ category.name }}"?</p>
 <form method="post">
     {% csrf_token %}
     <button class="primary-btn" type="submit">Confirm Delete</button>

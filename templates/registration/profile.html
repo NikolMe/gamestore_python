@@ -1,8 +1,9 @@
 {% extends 'shared/base.html' %}
 
 {% block title %}Home - My Site{% endblock %}
+{% load i18n %}
 
 {% block content %}
-<p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
+<h2>Profile</h2>
+    <p>{{ user.username }}</p>
 {% endblock %}

@@ -3,11 +3,11 @@
 {% block title %}Home - My Site{% endblock %}
 
 {% block content %}
-<h2>Publishers</h2>
-    
+    {% load i18n %}
+    <h2>{% trans "Publishers" %}</h2>
     {% load custom_tags %}
     {% if request.user|user_in_group:'manager' %}
-        <a class="primary-btn" href="{% url 'add_publisher' %}">Add Publisher</a>
+        <a class="primary-btn" href="{% url 'add_publisher' %}">{% trans "Add Publisher" %}</a>
     {% endif %}
         <div class="items-list">
             {% for publisher in publishers %}

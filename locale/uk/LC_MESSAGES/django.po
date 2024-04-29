@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 17:05+0000\n"
+"POT-Creation-Date: 2024-04-28 18:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: games/forms.py:13 games/forms.py:40
+#: games/forms.py:13 games/forms.py:42
 msgid "Name"
 msgstr "Назва"
 
@@ -38,54 +38,66 @@ msgid "Description"
 msgstr "Опис"
 
 #: games/forms.py:25
+#, fuzzy
+#| msgid "Description"
+msgid "Description_uk"
+msgstr "Опис uk"
+
+#: games/forms.py:26
+#, fuzzy
+#| msgid "Description"
+msgid "Description_fr"
+msgstr "Опис fr"
+
+#: games/forms.py:27
 msgid "Price"
 msgstr "Ціна"
 
-#: games/forms.py:26
+#: games/forms.py:28
 #, fuzzy
 #| msgid "Release Date:"
 msgid "Release Date"
 msgstr "Дата випуску:"
 
-#: games/forms.py:27 templates/game/game_detail.html:33
+#: games/forms.py:29 templates/game/game_detail.html:33
 msgid "Publisher"
 msgstr "Видавець"
 
-#: games/forms.py:28
+#: games/forms.py:30
 msgid "Type"
 msgstr "Тип"
 
-#: games/forms.py:29
+#: games/forms.py:31
 msgid "Discount"
 msgstr "Знижка"
 
-#: games/forms.py:30
+#: games/forms.py:32
 #: venv/lib/python3.12/site-packages/django/db/models/fields/files.py:393
 msgid "Image"
 msgstr "Зображення"
 
-#: games/forms.py:31 templates/category/categories.html:7
-#: templates/game/game_detail.html:27 templates/shared/base.html:25
+#: games/forms.py:33 templates/category/categories.html:7
+#: templates/game/game_detail.html:27 templates/shared/base.html:38
 msgid "Categories"
 msgstr "Категорії"
 
-#: games/forms.py:51
+#: games/forms.py:53
 #, fuzzy
 #| msgid "Users"
 msgid "Username"
 msgstr "Користувачі"
 
-#: games/forms.py:52
+#: games/forms.py:54
 msgid "Password"
 msgstr "Пароль"
 
-#: games/forms.py:53
+#: games/forms.py:55
 #, fuzzy
 #| msgid "Forgot password?"
 msgid "Confirm Password"
 msgstr "Забули пароль?"
 
-#: templates/category/add_category.html:8 templates/shared/base.html:23
+#: templates/category/add_category.html:8 templates/shared/base.html:36
 msgid "Home"
 msgstr "Головна"
 
@@ -138,6 +150,12 @@ msgstr "Підвердити"
 msgid "Release Date:"
 msgstr "Дата випуску:"
 
+#: templates/game/game_detail.html:36
+#: venv/lib/python3.12/site-packages/django/forms/formsets.py:484
+#: venv/lib/python3.12/site-packages/django/forms/formsets.py:491
+msgid "Order"
+msgstr "Замовити"
+
 #: templates/game/game_detail.html:43 templates/game/update_game.html:8
 #: templates/game/update_game.html:12
 msgid "Update Game"
@@ -170,7 +188,7 @@ msgstr "Видалити видавця"
 msgid "Update publisher"
 msgstr "Оновити видавця"
 
-#: templates/publisher/publishers.html:7 templates/shared/base.html:24
+#: templates/publisher/publishers.html:7 templates/shared/base.html:37
 msgid "Publishers"
 msgstr "Видавці"
 
@@ -202,17 +220,17 @@ msgstr "Забули пароль?"
 msgid "Create a new account."
 msgstr "Створіть новий аккаунт."
 
-#: templates/shared/base.html:28 templates/user/users.html:6
+#: templates/shared/base.html:33
+msgid "Change Language"
+msgstr "Обрати"
+
+#: templates/shared/base.html:41 templates/user/users.html:6
 msgid "Users"
 msgstr "Користувачі"
 
-#: templates/shared/base.html:33
+#: templates/shared/base.html:46
 msgid "Logout"
 msgstr "Вийти"
-
-#: templates/shared/base.html:44
-msgid "Change Language"
-msgstr "Обрати"
 
 #: templates/user/delete_user.html:6 templates/user/user_detail.html:15
 #, fuzzy
@@ -818,11 +836,6 @@ msgid "Please submit at least %(num)d form."
 msgid_plural "Please submit at least %(num)d forms."
 msgstr[0] ""
 msgstr[1] ""
-
-#: venv/lib/python3.12/site-packages/django/forms/formsets.py:484
-#: venv/lib/python3.12/site-packages/django/forms/formsets.py:491
-msgid "Order"
-msgstr "Замовити"
 
 #: venv/lib/python3.12/site-packages/django/forms/formsets.py:499
 msgid "Delete"

@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from .models import Game, Publisher, Category
-from .forms import PublisherForm, GameForm, CategoryForm, SignUpForm
+from .forms import PublisherForm, GameForm, CategoryForm, SignUpForm, UpdateUserForm
 from django.views.generic import View, UpdateView, CreateView, DetailView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -54,7 +54,7 @@ class HomeView(View):
         return render(request, 'home.html', {'games': games, 'publishers': publishers})
 
 
-@method_decorator(user_passes_test(user_is_manager), name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class GameCreateView(CreateView):
     model = Game
     form_class = GameForm
@@ -62,7 +62,6 @@ class GameCreateView(CreateView):
     success_url = reverse_lazy('home')
 
 
-@method_decorator(login_required, name='dispatch')
 class GameDetailView(DetailView):
     model = Game
     template_name = 'game/game_detail.html'
@@ -72,6 +71,13 @@ class GameDetailView(DetailView):
     def get_object(self, queryset=None):
         game_id = self.kwargs.get('game_id')
         return get_object_or_404(Game.objects.prefetch_related('categories', 'publisher'), pk=game_id)
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context['description'] = self.object.get_description(request)
+        return self.render_to_response(context)
 
 
 @method_decorator(user_passes_test(user_is_manager), name='dispatch')
@@ -199,7 +205,7 @@ class UserDeleteView(ObjectDeleteMixin, DeleteView):
 @method_decorator(user_passes_test(user_is_admin), name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
-    form_class = SignUpForm
+    form_class = UpdateUserForm
     template_name = 'user/update_user.html'
     pk_url_kwarg = 'user_id'
     success_url = reverse_lazy('users')
@@ -225,18 +231,14 @@ def set_manager_role(request, user_id):
     user.groups.add(manager_group)
     return redirect(reverse('user_detail', kwargs={'user_id': user_id}))
 
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect('/logout/')
-
-
 def sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # Redirect to login page after successful sign-up
+            user = form.save()
+            user_group, created = Group.objects.get_or_create(name='user')
+            user.groups.add(user_group)
+            return redirect('login')
     else:
         form = SignUpForm()
     return render(request, 'registration/sign_up.html', {'form': form})

@@ -4,10 +4,13 @@
 {% block title %}Home - My Site{% endblock %}
 
 {% block content %}
+                {% load i18n %}
+
 <h1>Add Game</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% load i18n %}
         {{ form|crispy }}
-        <button class="primary-btn" type="submit">Add Game</button>
+        <button class="primary-btn" type="submit">{% trans  "Add Game" %}</button>
     </form>
 {% endblock %}
